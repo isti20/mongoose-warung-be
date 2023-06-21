@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { DB_URL } from "./env.js";
+import { DB_URL } from "../config/env.js";
 
 // Connect to database
 try {
