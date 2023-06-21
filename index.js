@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
+import { PORT } from "./env.js";
 
-const PORT = 4001
 const app = express();
 
 app.use(cors());
