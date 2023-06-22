@@ -44,4 +44,24 @@ const detailProduct = async (req, res) => {
     }
 };
 
-export { createProduct, allProduct, detailProduct };
+const deleteProduct = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const product = await Products.findById(id);
+
+        if (!product) return messages(res, 404, "Product not found");
+
+        // delete image from cloudinary
+        await Cloudinary.uploader.destroy(product.cloudinary_id);
+
+        // delete product from database
+        await Products.deleteOne(product._id);
+
+        messages(res, 200, "Delete product success");
+    } catch (error) {
+        messages(res, 500, error?.messages || "Internal server error");
+    }
+};
+
+export { createProduct, allProduct, detailProduct, deleteProduct };
