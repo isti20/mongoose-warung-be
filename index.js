@@ -11,4 +11,11 @@ app.use(express.urlencoded({ limit: "5mb", extended: true}));
 
 app.use("/api/v2/", r_products);
 
+// handle not found
+app.use('*', (req, res) => {
+    res.status(400).send({
+        message: "Page not found"
+    })
+});
+
 app.listen(PORT, () => console.log("Server running on port", PORT));
