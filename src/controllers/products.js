@@ -23,4 +23,14 @@ const createProduct = async (req, res) => {
     } else messages(res, 423, "Image is required");
 };
 
-export { createProduct };
+const allProduct = async (req, res) => {
+    try {
+        const result = await Products.find();
+
+        messages(res, 200, "All product", result);
+    } catch (error) {
+        messages(res, 500, error?.messages || "Internal server error");
+    }
+};
+
+export { createProduct, allProduct };
