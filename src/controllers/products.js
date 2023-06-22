@@ -33,4 +33,15 @@ const allProduct = async (req, res) => {
     }
 };
 
-export { createProduct, allProduct };
+const detailProduct = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const result = await Products.findById(id);
+
+        messages(res, 200, "Detail product", result);
+    } catch (error) {
+        messages(res, 500, error?.messages || "Internal server error");
+    }
+};
+
+export { createProduct, allProduct, detailProduct };
