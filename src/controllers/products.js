@@ -64,4 +64,36 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-export { createProduct, allProduct, detailProduct, deleteProduct };
+const updateProduct = async (req, res) => {
+    const id = req.params.id;
+    const body = req.body;
+    const file = req.file;
+
+    try {
+        let product = await Products.findById(id);
+        const data = { ...body };
+
+        if (!product) return messages(res, 404, "Product not found");
+
+        if (file) {
+            // delete image from cloudinary
+            await Cloudinary.uploader.destroy(product.cloudinary_id);
+
+            // upload new image to cloudinary
+            const result = await Cloudinary.uploader.upload(file.path);
+
+            data.product_img = result.secure_url;
+            data.cloudinary_id = result.public_id;
+        }
+
+        const newData = await Products.findByIdAndUpdate(id, data, {
+            new: true,
+        });
+
+        messages(res, 200, "Update product success", newData);
+    } catch (error) {
+        messages(res, 500, error?.messages || "Internal server error");
+    }
+};
+
+export { createProduct, allProduct, detailProduct, deleteProduct, updateProduct };
